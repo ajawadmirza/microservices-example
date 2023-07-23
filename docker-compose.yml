@@ -1,45 +1,99 @@
-version: '1'
+version: "1"
 services:
   inventory:
-    build: 
+    build:
       context: ./inventory-service
       dockerfile: Dockerfile
     container_name: inventory-service
     volumes:
-     - ./inventory-service:/usr/src/app
+      - ./inventory-service:/usr/src/app
     ports:
-     - "5001:3001"
+      - "5001:3001"
     restart: always
 
   shipping:
-    build: 
+    build:
       context: ./shipping-service
       dockerfile: Dockerfile
     container_name: shipping-service
     volumes:
-     - ./shipping-service:/usr/src/app
+      - ./shipping-service:/usr/src/app
     ports:
-     - "5008:3002"
+      - "5008:3002"
     restart: always
+    depends_on:
+      - rabbitmq
+    networks:
+      - data-service-network
 
   users:
-    build: 
+    build:
       context: ./users-service
       dockerfile: Dockerfile
     container_name: users-service
     volumes:
-     - ./users-service:/usr/src/app
+      - ./users-service:/usr/src/app
     ports:
-     - "5005:3003"
+      - "5005:3003"
     restart: always
+    depends_on:
+      - rabbitmq
+    networks:
+      - data-service-network
 
   billing:
-    build: 
+    build:
       context: ./billing-service
       dockerfile: Dockerfile
     container_name: billing-service
     volumes:
-     - ./billing-service:/usr/src/app
+      - ./billing-service:/usr/src/app
     ports:
-     - "5009:3000"
+      - "5009:3000"
     restart: always
+    depends_on:
+      - rabbitmq
+    networks:
+      - data-service-network
+
+  data:
+    build:
+      context: ./data-service
+      dockerfile: Dockerfile
+    container_name: data-service
+    volumes:
+      - ./data-service:/usr/src/app
+    ports:
+      - "5002:3000"
+    restart: always
+    depends_on:
+      - rabbitmq
+    networks:
+      - data-service-network
+
+  webhook:
+    build:
+      context: ./webhook-service
+      dockerfile: Dockerfile
+    container_name: webhook-service
+    volumes:
+      - ./webhook-service:/usr/src/app
+    ports:
+      - "5007:3000"
+    restart: always
+    depends_on:
+      - rabbitmq
+    networks:
+      - data-service-network
+
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - data-service-network
+
+networks:
+  data-service-network:
+    driver: bridge
