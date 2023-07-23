@@ -1,0 +1,45 @@
+version: '1'
+services:
+  inventory:
+    build: 
+      context: ./inventory-service
+      dockerfile: Dockerfile
+    container_name: inventory-service
+    volumes:
+     - ./inventory-service:/usr/src/app
+    ports:
+     - "5001:3001"
+    restart: always
+
+  shipping:
+    build: 
+      context: ./shipping-service
+      dockerfile: Dockerfile
+    container_name: shipping-service
+    volumes:
+     - ./shipping-service:/usr/src/app
+    ports:
+     - "5008:3002"
+    restart: always
+
+  users:
+    build: 
+      context: ./users-service
+      dockerfile: Dockerfile
+    container_name: users-service
+    volumes:
+     - ./users-service:/usr/src/app
+    ports:
+     - "5005:3003"
+    restart: always
+
+  billing:
+    build: 
+      context: ./billing-service
+      dockerfile: Dockerfile
+    container_name: billing-service
+    volumes:
+     - ./billing-service:/usr/src/app
+    ports:
+     - "5009:3000"
+    restart: always
