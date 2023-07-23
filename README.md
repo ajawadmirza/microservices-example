@@ -1,4 +1,6 @@
-You can use `npm run start:dev` command in each service to start the server
+You can use `docker compose up` command to run all services.
+
+For individual App, you can use `npm run start:dev` command to start the server on your host machine.
 
 My employee number is 18511, so I will be running these services on following ports
 
