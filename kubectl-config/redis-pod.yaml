@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: abdulrazzaquejawad-18511-redis-pod
+  labels:
+    app: redis
+spec:
+  containers:
+    - name: redis-container
+      image: redis:latest
+      ports:
+        - containerPort: 1851
